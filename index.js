@@ -2,13 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const ytdl = require('ytdl-core');
 const validUrl = require('valid-url');
+const path = require('path');
 
 const app = express();
 
+// Enable CORS
 app.use(cors());
-app.listen(4000, () => {
-    console.log('Server Works !!! At port 4000');
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Route to serve index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+// Route to handle YouTube download
 app.get('/download', async (req, res) => {
     try {
         const URL = req.query.URL;
@@ -34,7 +43,12 @@ app.get('/download', async (req, res) => {
             res.status(500).send('Error downloading the video');
         });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).send('An unexpected error occurred');
     }
+});
+
+// Start the server
+app.listen(4000, () => {
+    console.log('Server Works !!! At port 4000');
 });

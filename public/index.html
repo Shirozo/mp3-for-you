@@ -125,7 +125,7 @@
         sendURL(URLinput.value);
     });
     function sendURL(URL) {
-        fetch(`https://mp-for-you.vercel.app/download?URL=${URL}`)
+        fetch(`https://mp3-for-you.vercel.app/download?URL=${URL}`)
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 400) {

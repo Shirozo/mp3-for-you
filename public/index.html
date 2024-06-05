@@ -115,5 +115,34 @@
     </div>
 
 </body>
+<script>
+    var convertBtn = document.getElementById('convert-button');
+    var URLinput = document.getElementById('URL-input');
+    var stats = document.getElementById("status")
+
+    convertBtn.addEventListener('click', () => {
+        console.log(`URL: ${URLinput.value}`);
+        sendURL(URLinput.value);
+    });
+    function sendURL(URL) {
+        fetch(`https://mp3-for-you.vercel.app/download?URL=${URL}`)
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        stats.innerHTML = "Youtube link it kelangan 🙂"
+                    }
+
+                    else if (response.status == 500) {
+                        stats.innerHTML === "Igchat ak bas ko tuhayon :/"
+                    }
+                }
+
+                else {
+                    window.open(`https://mp3-for-you.vercel.app/download?URL=${URL}`)
+                    stats.innerHTML = "Enjoy tim new music kikayyyy😇!"
+                }
+            })
+    }
+</script>
 
 </html>

@@ -3,6 +3,8 @@ const cors = require('cors');
 const ytdl = require('ytdl-core');
 const validUrl = require('valid-url');
 const path = require('path');
+const fs = require('fs');
+const ffmpeg = require('fluent-ffmpeg');
 
 const app = express();
 
@@ -40,12 +42,24 @@ app.get('/download', async (req, res) => {
 
         res.header('Content-Disposition', `attachment; filename="${filename}"`);
 
-        ytdl(URL, {
-            format: 'mp3',
+        const stream = ytdl(URL, {
+            quality: 'highestaudio',
             filter: 'audioonly'
-        }).pipe(res).on('error', (err) => {
-            res.status(500).send('Error downloading the video');
         });
+
+        // Compress and limit the size of the audio file using ffmpeg
+        ffmpeg(stream)
+            .audioBitrate(128)
+            .format('mp3')
+            .on('end', () => {
+                console.log('File has been converted successfully');
+            })
+            .on('error', (err) => {
+                console.error('Error converting file:', err);
+                res.status(500).send('Error downloading the video');
+            })
+            .pipe(res, { end: true });
+
     } catch (error) {
         console.log(error);
         res.status(500).send('An unexpected error occurred');

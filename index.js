@@ -34,7 +34,11 @@ app.get('/download', async (req, res) => {
             return res.status(400).send('Invalid YouTube URL');
         }
 
-        res.header('Content-Disposition', 'attachment; filename="video.mp3"');
+        const info = await ytdl.getInfo(URL);
+        const title = info.videoDetails.title;
+        const filename = `${title}.mp3`;
+
+        res.header('Content-Disposition', `attachment; filename="${filename}"`);
 
         ytdl(URL, {
             format: 'mp3',

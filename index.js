@@ -48,17 +48,12 @@ app.get('/download', async (req, res) => {
         });
 
         // Compress and limit the size of the audio file using ffmpeg
-        ffmpeg(stream)
-            .audioBitrate(128)
-            .format('mp3')
-            .on('end', () => {
-                console.log('File has been converted successfully');
-            })
-            .on('error', (err) => {
-                console.error('Error converting file:', err);
-                res.status(500).send('Error downloading the video');
-            })
-            .pipe(res, { end: true });
+        ytdl(URL, {
+            format: 'mp3',
+            filter: 'audioonly'
+        }).pipe(res).on('error', (err) => {
+            res.status(500).send('Error downloading the video');
+        });
 
     } catch (error) {
         console.log(error);

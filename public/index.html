@@ -161,7 +161,7 @@
         sendURL(URLinput.value);
     });
     function sendURL(URL) {
-        fetch(`https://mp3-for-you.vercel.app/download?URL=${URL}`)
+        fetch(`https://mp3-for-you.onrender.com/download?URL=${URL}`)
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 400) {
@@ -174,7 +174,7 @@
                 }
 
                 else {
-                    window.open(`https://mp3-for-you.vercel.app/download?URL=${URL}`)
+                    window.open(`https://mp3-for-you.onrender.com/download?URL=${URL}`)
                     stats.innerHTML = "Enjoy tim new music kikayyyy😇!"
                 }
             })
